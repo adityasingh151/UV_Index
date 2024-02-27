@@ -19,6 +19,21 @@ This web application allows users to check if they need to apply sunscreen based
 - Express.js (for server setup)
 - Axios (for making HTTP requests)
 - Open UV API (for retrieving UV index data)
+- 
+  ## Installation
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/adityasingh151/RandomJokeApp-using-JokeApi.git
+
+2. ```bash
+   cd random-jokes-web-app
+3. ```bash
+   npm install
+4. ```bash
+   npm install -g nodemon
+5. ```bash
+   nodemon index.js
 
 ## Usage
 
