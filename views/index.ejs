@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunscreen Checker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Additional custom styles */
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 relative min-h-screen">
+    <!-- Header -->
+    <header class="bg-blue-500 py-4">
+        <div class="container mx-auto text-center text-white">
+            <h1 class="text-3xl font-semibold">Sunscreen Checker</h1>
+            <p class="mt-2">Stay safe under the sun!</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto py-12">
+        <form id="locationForm" class="max-w-sm mx-auto">
+            <div class="mb-4">
+                <label for="latitude" class="block mb-1">Latitude:</label>
+                <input type="text" id="latitude" name="latitude" placeholder="Enter latitude" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="longitude" class="block mb-1">Longitude:</label>
+                <input type="text" id="longitude" name="longitude" placeholder="Enter longitude" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <button type="button" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600" onclick="getLocation()">Use My Location</button>
+            <button type="submit" class="w-full mt-2 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Check Sunscreen</button>
+        </form>
+        <div id="result" class="mt-6 text-center"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made with ❤️ by Aditya</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <script>
+        const form = document.getElementById('locationForm');
+        const resultDiv = document.getElementById('result');
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    document.getElementById('latitude').value = position.coords.latitude;
+                    document.getElementById('longitude').value = position.coords.longitude;
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+
+            try {
+                const response = await axios.get(`/sunscreen?lat=${latitude}&lon=${longitude}`);
+                const { needSunscreen } = response.data;
+
+                if (needSunscreen) {
+                    resultDiv.innerHTML = 'You need to apply sunscreen today.';
+                } else {
+                    resultDiv.innerHTML = 'You may not need to apply sunscreen today, but stay sun-safe!';
+                }
+            } catch (error) {
+                window.alert('Please enter valid latitude and longitude.');
+                resultDiv.innerHTML = 'Error checking sunscreen. Please try again later.';
+            }
+        });
+    </script>
+</body>
+</html>
